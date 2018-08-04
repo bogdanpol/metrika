@@ -5,6 +5,7 @@ class ExperimentCreate extends React.Component {
 		super(props);
 
 		this.state = {
+			name: "",
 			steps: [{
 				id: "1",
 				name: "",
@@ -12,6 +13,9 @@ class ExperimentCreate extends React.Component {
 		};
 
 		this.addStep = this.addStep.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
+		this.onNameChange = this.onNameChange.bind(this);
+		this.onStepChange = this.onStepChange.bind(this);
 		this.removeLastStep = this.removeLastStep.bind(this);
 	}
 
@@ -34,22 +38,49 @@ class ExperimentCreate extends React.Component {
 		}))
 	}
 
+	onNameChange(e) {
+		e.preventDefault();
+
+		this.setState({
+			name: e.target.value
+		});
+		console.log(this.state)
+	}
+
+	onStepChange(e, fieldName) {
+		e.preventDefault();
+
+		// this.setState((prevState) => ({
+		// 	steps: [
+		// 		...prevState.steps,
+		// 		[fieldName]: e.target.value
+		// 	]
+		// }));
+	}
+
+	onSubmit(e) {
+		e.preventDefault();
+
+		console.log(this.state)
+	}
+
 	render() {
-		const {steps} = this.state;
+		const {name, steps} = this.state;
 		return (
-			<form>
+			<form onSubmit={this.onSubmit}>
 				<div>
 					<label>
 						Experiment name
-						<input type="text"/>
+						<input value={name} onChange={this.onNameChange}
+							   placeholder="Type in experiment name" type="text"/>
 					</label>
 				</div>
 				<div>
 					<h5>Steps</h5>
 					<div>
-						<button onClick={this.addStep}>+ Add new step</button>
+						<a onClick={this.addStep}>+ Add new step</a>
 						{steps && steps.length > 1 &&
-						<button onClick={this.removeLastStep}>- Remove last step</button>
+						<a onClick={this.removeLastStep}>- Remove last step</a>
 						}
 					</div>
 					{steps.map((step) => {
@@ -64,6 +95,8 @@ class ExperimentCreate extends React.Component {
 				</div>
 
 				<button type="submit">Save</button>
+
+				{JSON.stringify(this.state)}
 			</form>
 		);
 	}
